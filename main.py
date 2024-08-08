@@ -14,9 +14,11 @@ Notes: {notes}
 
 Question: {question}
 """
+MODEL = 'llama3.1'
+NOTES_PATH = 'data/'
 
 def load_docs():
-    loader = UnstructuredMarkdownLoader()
+    loader = UnstructuredMarkdownLoader(NOTES_PATH)
     docs = loader.load()
     return docs
 
@@ -39,5 +41,20 @@ def query_db():
     db = Chroma(persist_directory='chroma', embedding_function=embedding_func)
     search = db.similarity_search_with_score(query, k=15)
     context = '\n\n---\n\n'.join([doc.page_content for doc, _score in search])
-    return context
+    return query, context
 
+def inference(context, query):
+    response = ollama.chat(
+        model=MODEL,
+        messages=[{'role': 'user', 'content': ChatPromptTemplate.from_template(PROMPT_TEMPLATE).format(context=context, question=query)}],
+        stream=True,
+        )
+    return response
+
+def main():
+    docs = load_docs()
+    chunks = split_docs(docs)
+    build_db(chunks)
+    query, context = query_db()
+    response = inference(context, query)
+    print(response)
