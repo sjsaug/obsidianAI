@@ -46,8 +46,8 @@ def query_db():
 def inference(context, query):
     response = ollama.chat(
         model=MODEL,
-        messages=[{'role': 'user', 'content': ChatPromptTemplate.from_template(PROMPT_TEMPLATE).format(context=context, question=query)}],
-        stream=True,
+        messages=[{'role': 'user', 'content': ChatPromptTemplate.from_template(PROMPT_TEMPLATE).format(notes=context, question=query)}],
+        stream=False,
         )
     return response
 
