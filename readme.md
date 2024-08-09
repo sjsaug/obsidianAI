@@ -1,5 +1,5 @@
 ## About
-An Ollama-based RAG app to interact with your Obsidian.md notes.
+An Ollama-based RAG app to interact with your Obsidian.md notes. <br/>**Please note this app is untested in it's current state. Will verify everything is 100% working when I have time.**
 
 ## Setup
 1. Download, install and run the Ollama app (https://ollama.com/download)
