@@ -8,6 +8,12 @@ from langchain_community.vectorstores import Chroma
 import os
 import shutil
 
+macos_fix = False
+if macos_fix == True:
+    # do not use, not recommended due for security. only using because it fixes a bug i have.
+    import ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
+
 PROMPT_TEMPLATE = """
 You are a helpful assistant answering questions regarding a user's notes in markdown format.
 Notes: {notes}
