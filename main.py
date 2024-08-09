@@ -30,10 +30,10 @@ def embedding_func():
     embeddings = GPT4AllEmbeddings(model_name='all-MiniLM-L6-v2.gguf2.f16.gguf', device='auto', gpt4all_kwargs={}) 
     return embeddings
 
-def build_db(chunks):
+def build_db(chunks: list[Document]):
     if os.path.exists('chroma'):
         shutil.remove('chroma')
-    Chroma.from_documents(chunks, embedding_func(), persist_directory='chroma')
+        Chroma.from_documents(chunks, embedding_func(), persist_directory='chroma')
 
 def query_db():
     query = input('How can I help you?: ')
@@ -47,14 +47,14 @@ def inference(context, query):
     response = ollama.chat(
         model=MODEL,
         messages=[{'role': 'user', 'content': ChatPromptTemplate.from_template(PROMPT_TEMPLATE).format(notes=context, question=query)}],
-        stream=False,
+        stream=True,
         )
-    return response
+    for chunk in response:
+        print(chunk['message']['content'], end='', flush=True)
 
-def main():
+if __name__ == '__main__':
     docs = load_docs()
     chunks = split_docs(docs)
     build_db(chunks)
     query, context = query_db()
-    response = inference(context, query)
-    print(response)
+    inference(context, query)
