@@ -18,8 +18,12 @@ MODEL = 'llama3.1'
 NOTES_PATH = 'data/'
 
 def load_docs():
-    loader = UnstructuredMarkdownLoader(NOTES_PATH)
-    docs = loader.load()
+    docs = []
+    for filename in os.listdir(NOTES_PATH):
+        if filename.endswith('.md'):
+            file_path = os.path.join(NOTES_PATH, filename)
+            loader = UnstructuredMarkdownLoader(file_path)
+            docs.extend(loader.load())
     return docs
 
 def split_docs(docs):
