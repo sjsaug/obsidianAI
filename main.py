@@ -37,7 +37,7 @@ def split_docs(docs):
     return splitter
 
 def embedding_func():
-    embeddings = GPT4AllEmbeddings(model_name='all-MiniLM-L6-v2.gguf2.f16.gguf', device='auto', gpt4all_kwargs={}) 
+    embeddings = GPT4AllEmbeddings(model_name='all-MiniLM-L6-v2.gguf2.f16.gguf', device='gpu', gpt4all_kwargs={}) 
     return embeddings
 
 def build_db(chunks: list[Document]):
@@ -45,9 +45,8 @@ def build_db(chunks: list[Document]):
         shutil.remove('chroma')
         Chroma.from_documents(chunks, embedding_func(), persist_directory='chroma')
 
-def query_db():
+def query_db(embedding_func):
     query = input('How can I help you?: ')
-    embedding_func = embedding_func()
     db = Chroma(persist_directory='chroma', embedding_function=embedding_func)
     search = db.similarity_search_with_score(query, k=15)
     context = '\n\n---\n\n'.join([doc.page_content for doc, _score in search])
@@ -66,5 +65,6 @@ if __name__ == '__main__':
     docs = load_docs()
     chunks = split_docs(docs)
     build_db(chunks)
-    query, context = query_db()
+    embedding_func = embedding_func()
+    query, context = query_db(embedding_func)
     inference(context, query)
