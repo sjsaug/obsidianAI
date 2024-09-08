@@ -1,5 +1,5 @@
 ## About
-An Ollama-based RAG app to interact with your Obsidian.md notes. <br/>**Please note this app is untested in it's current state. Will verify everything is 100% working when I have time.**
+An Ollama-based RAG app to interact with your Obsidian.md notes. <br/>**Please note that this app is untested in its current state. I will verify everything is 100% working when I have time. <br/> This probably won't work with directories containing sub-directories.**
 
 ## Setup
 1. Download, install and run the Ollama app (https://ollama.com/download)
@@ -10,4 +10,4 @@ An Ollama-based RAG app to interact with your Obsidian.md notes. <br/>**Please n
 
 ## Common Fixes
 - If you are receiving port-related errors, make sure the Ollama app is running. I have it configured to run at startup.
-- Ensure your notes are .md files. To get this working with PDF or other file types you will need to edit the load_docs() function. I also haven't tested this with directories containing sub-directories.
+- Ensure your notes are .md files. To get this working with PDF or other file types you will need to edit the load_docs() function.
