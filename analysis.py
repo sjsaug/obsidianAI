@@ -1,8 +1,12 @@
 import pandas
+import matplotlib.pyplot as plot
 
 class Analysis:
-    def __init__(self, file_path):
-        self.data = pandas.read_csv(file_path)
+    def __init__(self, type, file_path):
+        if type == 'csv':
+            self.data = pandas.read_csv(file_path)
+        if type == 'parquet':
+            self.data = pandas.read_parquet(file_path)
 
     def summary_statistics(self):
         return self.data.describe()
@@ -16,8 +20,12 @@ class Analysis:
     def get_columns(self):
         return list(self.data.columns)
     
-    def get_types(self):
-        return self.data.dtypes
-    
     def missing_values(self):
         return self.data.isnull().sum()
+    
+    def histogram(self, column):
+        self.data[column].hist(bins=30)
+        plot.title(f'Histogram of {column}')
+        plot.xlabel(column)
+        plot.ylabel('Frequency')
+        plot.show()
